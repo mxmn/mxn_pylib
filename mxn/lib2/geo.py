@@ -1,6 +1,4 @@
-"""Geography / geodesy related.
-
-Maybe rename to gis?
+"""Geography / geodesy related functions.
 
 """
 

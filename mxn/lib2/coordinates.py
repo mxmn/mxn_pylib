@@ -29,8 +29,6 @@ References
 .. [1] T. H. Meyer. Introduction to geometrical and physical geodesy:
     foundations of geomatics. ESRI Press, Redlands, California, 2010.
 
-Authors: M. Neumann
-
 """
 
 import numpy as np
