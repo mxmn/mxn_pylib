@@ -98,45 +98,51 @@ def isbool(d):
     return np.issubdtype(d.dtype, bool)
 
 
+# Basic stats
 def mm(data, f=None):
     """Some basic stats about the data.
-    f : number format specification"""
+
+    :param f: string; number format specification.
+    """
     if len(data) == 0:
-        print("[empty]")
+        print "[empty]"
         return
-    if type(data) is np.ndarray:
-        mn, mx = data.min(), data.max()
+    if isinstance(data, np.ndarray):
         if f is None:
-            if isfloat(data): f = u'{:.7}'
-            elif isint(data): f = u'{:7}'
-            elif isbool(data): f = u'{:1}'
+            if np.issubdtype(data.dtype, float):
+                f = u'{:.7}'
+            elif np.issubdtype(data.dtype, int):
+                f = u'{:7}'
+            elif np.issubdtype(data.dtype, bool):
+                f = u'{:1}'
             else:
                 f = u'{}'
         s1 = "np.{} {}: ".format(data.dtype, data.shape)
         s2 = (f+" {} "+f+" ["+f+" .. "+f+"]").format(
-            data.mean(),u'\u00B1',data.std(),mn, mx)
+            data.mean(), u'\u00B1', data.std(), data.min(), data.max())
         if len(s1)+len(s2) <= 80:
-            print(s1+s2)
+            print s1+s2
         else:
-            print(s1+"\n  "+s2)
-    elif type(data) is list:
-        print('Length:', len(data),'Type:',type(data))
-        print('Stats:',mean(data),u'\u00B1',std(data), \
-            'in [', min(data),'..',max(data),']')
-    else: print('Value:',data)
+            print s1+"\n  "+s2
+    elif isinstance(data, list):
+        print 'Length:', len(data), 'Type:', type(data)
+        print 'Stats:', np.mean(data), u'\u00B1', np.std(data), 'in [', min(data), '..', max(data), ']'
+    else: print 'Value:', data
 
 def mmf(a, round=None, fmt=None):
     """Returns a string with main stats info. (assumes numpy array)"""
     if len(a) == 0:
         return "[empty]"
-    if type(a) is not np.ndarray: a = np.asarray(a)
+    if not isinstance(a, np.ndarray):
+        a = np.asarray(a)
     if fmt is None:
         fmt = '{:.3f}'
     if a.dtype.kind in ['i', 'u']:
-        return (fmt+u' \u00B1'+fmt+' [{}..{}]').format(a.mean(),a.std(),\
-                                                     a.min(),a.max())
-    return (fmt+u' \u00B1'+fmt+' ['+fmt+'..'+fmt+']').format(a.mean(),a.std(),\
-            a.min(),a.max())
+        return (fmt+u' \u00B1'+fmt+' [{}..{}]').format(
+            a.mean(), a.std(), a.min(), a.max())
+    return (fmt+u' \u00B1'+fmt+' ['+fmt+'..'+fmt+']').format(
+        a.mean(), a.std(), a.min(), a.max())
+
 def mmfm(a, round=None):
     """Returns a string with main stats info. (assumes numpy array)"""
     if type(a) is not np.ndarray: a = np.array(a)

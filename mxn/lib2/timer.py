@@ -17,6 +17,27 @@ from __future__ import absolute_import, division, print_function
 import time
 
 
+def timer(f):
+    """Timer decorator function."""
+    def helper(*args, **kwargs):
+        title = f.__name__
+        start = time.time()
+        print("++DECO-TIMER++ {} start: {}".format(title,time.ctime()))
+        res = f(*args,**kwargs)
+        end = time.time()
+        secs = end - start
+        msecs = secs * 1000  # millisecs
+        print("++DECO-TIMER++ {} elapsed: ".format(title), end="")
+        if secs < 1:
+            print('%f ms' % msecs)
+        elif secs < 100:
+            print('%f s' % secs)
+        else:
+            print('%f min' % (secs/60.0))
+        return res
+    return helper
+
+
 class Timer(object):
     def __init__(self, title="", verbose=True, log=None):
         self.title = title if title!="" else "++TIMER++"
@@ -44,27 +65,6 @@ class Timer(object):
                      format(self.secs/60.0))
         if self.log is None: print(s)
         else: self.log.info(s)
-
-
-
-def timer(f):
-    def helper(*args, **kwargs):
-        title = f.__name__
-        start = time.time()
-        print("++DECO-TIMER++ {} start: {}".format(title,time.ctime()))
-        res = f(*args,**kwargs)
-        end = time.time()
-        secs = end - start
-        msecs = secs * 1000  # millisecs
-        print("++DECO-TIMER++ {} elapsed: ".format(title), end="")
-        if secs < 1:
-            print('%f ms' % msecs)
-        elif secs < 100:
-            print('%f s' % secs)
-        else:
-            print('%f min' % (secs/60.0))
-        return res
-    return helper
 
 
 class DTimer(object):
